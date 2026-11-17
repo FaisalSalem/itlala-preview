@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar"><head><meta charset="utf-8"/><title>ITLALA Prototype</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Noto+Kufi+Arabic:wght@500;600;700&family=Bodoni+Moda:opsz,wght@6..96,500;6..96,600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,300..500,0..1,0&display=block" rel="stylesheet"/>
+<style>
+:root{color-scheme:light;}
+html,body{margin:0;padding:0;background:#fdf7ff;-webkit-tap-highlight-color:transparent;}
+body{overscroll-behavior-y:none;min-height:100dvh;}
+.pb-safe{padding-bottom:calc(env(safe-area-inset-bottom,0px) + 0.25rem);}
+.pt-safe{padding-top:env(safe-area-inset-top,0px);}
+.no-scrollbar::-webkit-scrollbar{display:none;}.no-scrollbar{scrollbar-width:none;}
+.material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400;line-height:1;}
+.icon-fill{font-variation-settings:'FILL' 1,'wght' 400;}
+:focus-visible{outline:2px solid #5f577c;outline-offset:2px;}
+@media (min-width:640px){body{max-width:430px;margin:0 auto!important;box-shadow:0 0 40px rgba(81,74,101,0.12);}header,nav{max-width:430px;left:50%!important;transform:translateX(-50%);}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;}}
+</style>
+<script src="https://cdn.tailwindcss.com/3.4.17"></script>
+<script>tailwind.config={theme:{extend:{colors:{"on-primary":"#ffffff","inverse-surface":"#332d46","surface-variant":"#e8ddff","on-surface":"#1e1830","primary-container":"#786f96","surface-container":"#f3eaff","surface-container-low":"#f8f1ff","surface-container-lowest":"#ffffff","tertiary-fixed":"#f3e0bd","on-secondary-container":"#5a536b","tertiary":"#685a3f","surface-container-high":"#ede4ff","outline":"#6f6b75","surface":"#fdf7ff","secondary":"#625b73","secondary-container":"#e5dbf9","primary":"#5f577c","surface-container-highest":"#e8ddff","on-surface-variant":"#48454d","outline-variant":"#e2dce8"},fontFamily:{sans:['"IBM Plex Sans Arabic"','system-ui','sans-serif'],kufi:['"Noto Kufi Arabic"','"IBM Plex Sans Arabic"','sans-serif'],brand:['"Bodoni Moda"','serif']}}}}</script>
+</head>
+<body class="bg-surface font-sans text-on-surface flex flex-col min-h-screen">
+
+<header class="fixed top-0 w-full z-40 pt-safe bg-surface border-b border-outline-variant">
+  <div class="h-16 px-5 flex items-center justify-between">
+    <div class="flex items-center gap-2.5 min-w-0">
+      <div class="w-9 h-9 rounded-full bg-surface-container-high flex items-center justify-center text-primary"><span class="material-symbols-outlined icon-fill text-[20px]">diamond</span></div>
+      <div class="flex flex-col leading-none">
+        <span class="font-brand text-[17px] font-semibold tracking-wide" dir="ltr">ITLALA</span>
+        <span class="text-xs text-outline mt-1">إطلالة • مستشارتك للأناقة</span>
+      </div>
+    </div>
+    <div class="flex items-center gap-1">
+      <button class="w-11 h-11 flex items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container" onclick="switchTab('chat')" aria-label="اسألي نورة" title="اسألي نورة"><span class="material-symbols-outlined text-[22px]">auto_awesome</span></button>
+      <button class="w-11 h-11 flex items-center justify-center rounded-full" onclick="switchTab('profile')" aria-label="حسابي" title="حسابي"><span class="w-8 h-8 rounded-full overflow-hidden bg-surface-container-high"><img src="img-8.jpg" alt="" class="w-full h-full object-cover"/></span></button>
+    </div>
+  </div>
+</header>
+
+<main class="flex-1 w-full pt-20 pb-28">
+
+<div class="fixed top-20 left-1/2 -translate-x-1/2 z-[60] flex items-center gap-2 px-4 py-2.5 rounded-full bg-inverse-surface text-white shadow-lg opacity-0 pointer-events-none transition-all duration-200 -translate-y-2 max-w-[90vw]" id="toast" role="status" aria-live="polite">
+  <span class="material-symbols-outlined text-[18px] text-tertiary-fixed">check_circle</span>
+  <span class="text-sm" id="toast-text"></span>
+</div>
+
+<!-- الرئيسية -->
+<section class="view-panel flex flex-col px-5 pb-8 gap-5" id="view-home">
+  <div class="flex items-center justify-between">
+    <div>
+      <h1 class="font-kufi text-lg font-semibold">صباح الأناقة، سارة</h1>
+      <p class="text-sm text-outline mt-0.5">الخميس ٢٢ فبراير • يوم التأسيس</p>
+    </div>
+    <div class="flex items-center gap-1 px-3 py-1.5 rounded-full bg-surface-container-high text-primary">
+      <span class="material-symbols-outlined icon-fill text-[16px] text-tertiary">local_fire_department</span>
+      <span class="text-sm font-semibold" id="streak-count">١٤ يوم تأنّق</span>
+    </div>
+  </div>
+
+  <article class="rounded-2xl bg-surface-container-lowest overflow-hidden border border-outline-variant">
+    <div class="relative aspect-[4/5] bg-surface-container">
+      <img class="w-full h-full object-cover transition-opacity duration-300" alt="" id="look-img" src="img-2.jpg"/>
+      <span class="absolute top-3 right-3 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white text-on-surface text-xs font-semibold shadow-sm">
+        <span class="w-2 h-2 rounded-full bg-primary"></span>تنسيق اليوم
+      </span>
+      <span class="absolute bottom-3 right-3 flex items-center gap-1 px-3 py-1.5 rounded-full bg-primary text-white text-xs" id="look-badge">
+        <span class="material-symbols-outlined text-[14px] text-tertiary-fixed">palette</span><span id="look-badge-text">يناسب ألوانك الدافئة</span>
+      </span>
+    </div>
+    <div class="p-4 flex flex-col gap-4">
+      <div>
+        <div class="flex items-center justify-between text-xs">
+          <span class="text-tertiary font-semibold" id="look-collection">المجموعة الخزامية</span>
+          <span class="text-outline" id="look-counter">١ من ٣</span>
+        </div>
+        <h2 class="font-kufi text-base font-semibold mt-1.5 leading-relaxed" id="look-title"></h2>
+        <p class="text-sm text-on-surface-variant mt-1 leading-relaxed" id="look-sub"></p>
+      </div>
+      <div class="flex items-center gap-2">
+        <button class="flex-1 flex items-center justify-center gap-2 h-12 rounded-xl bg-primary hover:bg-primary-container text-white font-semibold transition-colors disabled:opacity-80" id="btn-wear-today" onclick="handleWearToday()">
+          <span class="material-symbols-outlined text-[20px]">check_circle</span><span>ارتديتها اليوم</span>
+        </button>
+        <button class="w-12 h-12 flex items-center justify-center rounded-xl bg-surface-container-high text-primary hover:bg-surface-variant" onclick="handleSwapLook()" aria-label="اقتراح بديل" title="اقتراح بديل"><span class="material-symbols-outlined text-[22px]">sync</span></button>
+        <button class="w-12 h-12 flex items-center justify-center rounded-xl bg-secondary-container text-on-secondary-container hover:bg-surface-variant" onclick="openRoomFromLook()" aria-label="جرّبيها في غرفة التبديل" title="جرّبيها في غرفة التبديل"><span class="material-symbols-outlined text-[22px]">view_in_ar</span></button>
+      </div>
+    </div>
+  </article>
+
+  <div class="flex flex-col gap-3">
+    <h3 class="font-kufi text-base font-semibold">خدمات إطلالة</h3>
+    <div class="grid grid-cols-3 gap-2">
+      <button class="flex flex-col items-center gap-1.5 py-4 rounded-xl bg-surface-container-low hover:bg-surface-container text-center" onclick="openModal('modal-scanner')">
+        <span class="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center text-primary"><span class="material-symbols-outlined text-[20px]">photo_camera</span></span>
+        <span class="text-sm font-medium">صوّري قطعة</span><span class="text-xs text-outline">تنضاف لدولابك</span>
+      </button>
+      <button class="flex flex-col items-center gap-1.5 py-4 rounded-xl bg-surface-container-low hover:bg-surface-container text-center" onclick="openModal('modal-colors')">
+        <span class="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center text-primary"><span class="material-symbols-outlined text-[20px]">palette</span></span>
+        <span class="text-sm font-medium">ألوانك</span><span class="text-xs text-outline">درجات خريفية</span>
+      </button>
+      <button class="flex flex-col items-center gap-1.5 py-4 rounded-xl bg-surface-container-low hover:bg-surface-container text-center" onclick="switchTab('chat')">
+        <span class="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center text-primary"><span class="material-symbols-outlined text-[20px]">forum</span></span>
+        <span class="text-sm font-medium">اسألي نورة</span><span class="text-xs text-outline">متاحة الآن</span>
+      </button>
+    </div>
+  </div>
+
+  <button class="flex items-center justify-between p-4 rounded-xl bg-surface-container-lowest border border-outline-variant text-right hover:bg-surface-container-low" onclick="switchTab('calendar')">
+    <span class="flex items-center gap-3">
+      <span class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center text-primary"><span class="material-symbols-outlined text-[20px]">calendar_month</span></span>
+      <span><span class="block font-semibold">مناسبتك الجاية: عشاء عمل</span><span class="block text-sm text-outline">الليلة ٨:٣٠ م • الإطلالة تحتاج تجهيز</span></span>
+    </span>
+    <span class="text-sm text-primary font-semibold flex items-center">تقويمي<span class="material-symbols-outlined text-[20px]">chevron_left</span></span>
+  </button>
+
+  <div class="flex items-center justify-between p-4 rounded-xl bg-secondary-container">
+    <div class="flex items-center gap-3">
+      <span class="w-10 h-10 rounded-full bg-white/80 flex items-center justify-center text-primary"><span class="material-symbols-outlined text-[20px]">checkroom</span></span>
+      <div><p class="font-semibold">دولابك جاهز</p><p class="text-sm text-on-secondary-container">٨٤ قطعة مصنّفة</p></div>
+    </div>
+    <button class="px-4 h-10 rounded-full bg-primary text-white text-sm font-semibold" onclick="switchTab('wardrobe')">افتحي الدولاب</button>
+  </div>
+</section>
+
+<!-- الدولاب -->
+<section class="view-panel hidden flex-col px-5 pb-8 gap-4" id="view-wardrobe">
+  <div class="flex items-center justify-between">
+    <div><h1 class="font-kufi text-xl font-semibold">دولابي</h1><p class="text-sm text-outline mt-0.5">٨٤ قطعة • لبستِ ٨٢٪ منها هالموسم</p></div>
+    <button class="flex items-center gap-1.5 px-4 h-10 rounded-full bg-primary text-white text-sm font-semibold" onclick="openModal('modal-scanner')"><span class="material-symbols-outlined text-[18px]">add_a_photo</span>أضيفي قطعة</button>
+  </div>
+  <div class="flex items-center gap-2 overflow-x-auto no-scrollbar -mx-5 px-5" role="tablist">
+    <button class="wardrobe-chip px-4 h-9 rounded-full text-sm whitespace-nowrap border" onclick="filterWardrobe('all', this)" aria-pressed="true">الكل</button>
+    <button class="wardrobe-chip px-4 h-9 rounded-full text-sm whitespace-nowrap border" onclick="filterWardrobe('abayas', this)">عبايات ومناسبات</button>
+    <button class="wardrobe-chip px-4 h-9 rounded-full text-sm whitespace-nowrap border" onclick="filterWardrobe('blazers', this)">بليزرات وأطقم</button>
+    <button class="wardrobe-chip px-4 h-9 rounded-full text-sm whitespace-nowrap border" onclick="filterWardrobe('accessories', this)">حقائب وإكسسوار</button>
+  </div>
+  <div class="grid grid-cols-2 gap-3" id="wardrobe-grid"></div>
+</section>
+
+<!-- نورة -->
+<section class="view-panel hidden flex-col px-5 pb-8 gap-4" id="view-chat">
+  <div class="flex items-center gap-3 p-4 rounded-xl bg-surface-container-high">
+    <div class="relative w-12 h-12 flex-shrink-0">
+      <img class="w-12 h-12 rounded-full object-cover" alt="" src="img-7.jpg"/>
+      <span class="absolute bottom-0 left-0 w-3 h-3 rounded-full bg-emerald-500 ring-2 ring-white"></span>
+    </div>
+    <div class="min-w-0">
+      <h1 class="font-kufi text-base font-semibold">نورة، مستشارتك الشخصية</h1>
+      <p class="text-xs text-outline mt-0.5">مستشارة ذكية تعرف دولابك وذوقك</p>
+    </div>
+  </div>
+  <div class="flex items-center gap-2 overflow-x-auto no-scrollbar -mx-5 px-5">
+    <button class="px-3.5 h-9 rounded-full bg-surface-container text-sm whitespace-nowrap" onclick="sendQuickPrompt('وش ألبس لعزيمة عائلية يوم الجمعة؟')">وش ألبس لعزيمة الجمعة؟</button>
+    <button class="px-3.5 h-9 rounded-full bg-surface-container text-sm whitespace-nowrap" onclick="sendQuickPrompt('نسقي لي شنطة مع عبايتي الكحلية')">شنطة مع عبايتي الكحلية</button>
+    <button class="px-3.5 h-9 rounded-full bg-surface-container text-sm whitespace-nowrap" onclick="sendQuickPrompt('هل يناسبني اللون الخزامي؟')">هل يناسبني الخزامي؟</button>
+  </div>
+  <div class="flex flex-col gap-4 min-h-[300px] max-h-[52vh] overflow-y-auto no-scrollbar" id="chat-messages" aria-live="polite">
+    <div class="flex flex-col items-start max-w-[85%] self-start gap-1">
+      <div class="px-4 py-3 rounded-2xl rounded-tr-md bg-surface-container leading-relaxed">أهلاً سارة 🌸 نسقت لك إطلالة اليوم ليوم التأسيس. تبين نعدّل شي، أو عندك مناسبة في المساء؟</div>
+      <span class="text-xs text-outline px-1">١٠:١٤ ص</span>
+    </div>
+    <div class="flex flex-col items-end max-w-[85%] self-end gap-1">
+      <div class="px-4 py-3 rounded-2xl rounded-tl-md bg-primary text-white leading-relaxed">عندي عشاء رسمي في الدرعية الليلة، وش الحذاء والإكسسوار اللي يرفع العباية؟</div>
+      <span class="text-xs text-outline px-1">١٠:١٦ ص</span>
+    </div>
+    <div class="flex flex-col items-start max-w-[85%] self-start gap-1">
+      <div class="px-4 py-3 rounded-2xl rounded-tr-md bg-surface-container leading-relaxed">اختيار حلو للدرعية! من دولابك أقترح:
+        <ul class="list-disc pr-5 mt-2 space-y-1 text-sm text-on-surface-variant">
+          <li>حذاء نيود عاجي بكعب رفيع</li>
+          <li>حقيبة اليمامة الصغيرة بقفلها الذهبي</li>
+          <li>أقراط لؤلؤ ناعمة توازن التطريز</li>
+        </ul>
+      </div>
+      <span class="text-xs text-outline px-1">١٠:١٧ ص</span>
+    </div>
+  </div>
+  <div class="hidden items-center gap-2 px-3 py-2 rounded-full bg-surface-container w-fit text-outline text-sm" id="typing-indicator">
+    <span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span><span>نورة تكتب…</span>
+  </div>
+  <form class="flex items-center gap-2 p-1.5 rounded-2xl bg-surface-container-lowest border border-outline-variant" onsubmit="event.preventDefault(); sendChatMessage();">
+    <button type="button" class="w-10 h-10 flex items-center justify-center rounded-xl text-primary hover:bg-surface-container" onclick="openModal('modal-scanner')" aria-label="أرسلي صورة قطعة" title="أرسلي صورة قطعة"><span class="material-symbols-outlined text-[22px]">add_photo_alternate</span></button>
+    <label for="chat-input" class="sr-only">رسالتك لنورة</label>
+    <input class="flex-1 min-w-0 bg-transparent border-0 outline-none text-base placeholder:text-outline px-1" id="chat-input" placeholder="اكتبي سؤالك لنورة…" type="text" autocomplete="off"/>
+    <button type="submit" class="w-10 h-10 flex items-center justify-center rounded-xl bg-primary text-white hover:bg-primary-container" aria-label="إرسال" title="إرسال"><span class="material-symbols-outlined text-[20px] -scale-x-100">send</span></button>
+  </form>
+</section>
+
+<!-- غرفة التبديل -->
+<section class="view-panel hidden flex-col px-5 pb-8 gap-4" id="view-room">
+  <div class="flex items-center justify-between">
+    <div><h1 class="font-kufi text-xl font-semibold">غرفة التبديل</h1><p class="text-sm text-outline mt-0.5">نموذجك ثلاثي الأبعاد • جرّبي قطعك عليه</p></div>
+    <button class="flex items-center gap-1.5 px-3 h-10 rounded-full bg-surface-container text-primary text-sm font-semibold" onclick="openCapture()"><span class="material-symbols-outlined text-[18px]">3d_rotation</span>أعيدي التصوير</button>
+  </div>
+
+  <div class="relative rounded-2xl overflow-hidden bg-gradient-to-b from-surface-container-high to-surface-container-low border border-outline-variant" style="perspective:900px">
+    <div class="aspect-[3/4] flex items-center justify-center">
+      <img id="avatar-img" src="img-10.jpg" alt="نموذجك ثلاثي الأبعاد" class="w-full h-full object-cover object-bottom transition-transform duration-150" style="transform-style:preserve-3d"/>
+    </div>
+    <span class="absolute top-3 right-3 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white text-xs font-semibold shadow-sm"><span class="material-symbols-outlined text-[16px] text-primary">view_in_ar</span>نموذج ثلاثي الأبعاد</span>
+    <span class="absolute top-3 left-3 px-3 py-1.5 rounded-full bg-white text-xs text-outline shadow-sm" id="avatar-updated">آخر تصوير: قبل ٣ أيام</span>
+    <div class="absolute bottom-3 inset-x-3 flex flex-wrap gap-1.5" id="worn-chips"></div>
+  </div>
+
+  <div class="flex items-center gap-3 px-1">
+    <span class="material-symbols-outlined text-[22px] text-primary">360</span>
+    <label for="avatar-rotate" class="sr-only">تدوير النموذج</label>
+    <input id="avatar-rotate" type="range" min="-45" max="45" value="0" class="flex-1 accent-[#5f577c]" oninput="rotateAvatar(this.value)"/>
+    <span class="text-sm text-outline w-16 text-left" id="avatar-angle">أمامي</span>
+  </div>
+
+  <div class="flex flex-col gap-2">
+    <h2 class="font-kufi text-base font-semibold">جرّبي من دولابك</h2>
+    <div class="flex gap-2 overflow-x-auto no-scrollbar -mx-5 px-5 pb-1" id="room-rail"></div>
+  </div>
+
+  <div class="p-4 rounded-xl bg-surface-container-lowest border border-outline-variant flex flex-col gap-2" id="fit-notes"></div>
+
+  <div class="flex gap-2">
+    <button class="flex-1 h-12 rounded-xl bg-primary hover:bg-primary-container text-white font-semibold flex items-center justify-center gap-2" onclick="saveRoomLook()"><span class="material-symbols-outlined text-[20px]">bookmark</span>احفظي الإطلالة</button>
+    <button class="flex-1 h-12 rounded-xl bg-secondary-container text-on-secondary-container font-semibold flex items-center justify-center gap-2" onclick="askNoraAboutRoom()"><span class="material-symbols-outlined text-[20px]">forum</span>رأي نورة</button>
+  </div>
+</section>
+
+<!-- التقويم -->
+<section class="view-panel hidden flex-col px-5 pb-8 gap-4" id="view-calendar">
+  <div class="flex items-center justify-between">
+    <div class="flex items-center gap-1">
+      <button class="w-10 h-10 -mr-2 flex items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container" onclick="switchTab('home')" aria-label="رجوع للرئيسية" title="رجوع"><span class="material-symbols-outlined text-[22px]">arrow_forward</span></button>
+      <div><h1 class="font-kufi text-xl font-semibold">تقويمي</h1><p class="text-sm text-outline mt-0.5">مناسباتك وإطلالاتها • فبراير</p></div>
+    </div>
+    <button class="w-11 h-11 rounded-full bg-surface-container flex items-center justify-center text-primary" onclick="showToast('تمت مزامنة التقويم مع جوالك')" aria-label="مزامنة مع تقويم الجوال" title="مزامنة مع تقويم الجوال"><span class="material-symbols-outlined text-[22px]">event_repeat</span></button>
+  </div>
+  <div class="grid grid-cols-4 gap-2 text-center" id="date-strip"></div>
+  <div class="flex flex-col gap-3">
+    <h2 class="font-kufi text-base font-semibold" id="current-day-heading"></h2>
+    <div class="flex flex-col gap-3" id="events-list"></div>
+  </div>
+</section>
+
+<!-- حسابي -->
+<section class="view-panel hidden flex-col px-5 pb-8 gap-4" id="view-profile">
+  <div class="flex flex-col items-center text-center p-6 rounded-2xl bg-surface-container-high">
+    <img class="w-20 h-20 rounded-full object-cover mb-3" alt="" src="img-8.jpg"/>
+    <h1 class="font-kufi text-xl font-semibold">سارة العتيبي</h1>
+    <div class="flex items-center gap-1.5 mt-1.5 text-tertiary"><span class="material-symbols-outlined text-[18px]">diamond</span><span class="text-sm font-semibold">عضوية إطلالة بريفيه</span></div>
+    <p class="text-sm text-outline mt-1" id="membership-note">تتجدد العضوية بعد ٢١ يوماً</p>
+  </div>
+
+  <div class="p-4 rounded-xl bg-surface-container-lowest border border-outline-variant flex flex-col gap-3">
+    <div><h2 class="font-kufi text-base font-semibold">مزايا عضويتك</h2><p class="text-sm text-outline mt-0.5">استشارات غير محدودة مع نورة ومعاينة الإطلالات</p></div>
+    <div class="flex flex-col gap-1.5">
+      <div class="flex items-center justify-between px-3 py-2.5 rounded-lg bg-surface-container-low text-sm"><span>استشارات نورة</span><span class="font-semibold text-tertiary">غير محدودة</span></div>
+      <div class="flex items-center justify-between px-3 py-2.5 rounded-lg bg-surface-container-low text-sm"><span>غرفة التبديل ثلاثية الأبعاد</span><span class="font-semibold text-tertiary">مفعّلة</span></div>
+      <div class="flex items-center justify-between px-3 py-2.5 rounded-lg bg-surface-container-low text-sm"><span>جلسة مع خبيرة تنسيق</span><span class="font-semibold text-primary">بالحجز</span></div>
+      <div class="flex items-center justify-between px-3 py-2.5 rounded-lg bg-surface-container-low text-sm"><span>تحليل ألوان البشرة</span><span class="font-semibold text-primary">مفعّل</span></div>
+    </div>
+    <button class="w-full h-12 rounded-xl bg-primary hover:bg-primary-container text-white font-semibold" onclick="openSubscriptionSheet()">إدارة الاشتراك</button>
+  </div>
+
+  <div class="flex flex-col gap-2">
+    <h2 class="font-kufi text-base font-semibold px-1">الإعدادات</h2>
+    <div class="flex items-center justify-between p-4 rounded-xl bg-surface-container-lowest border border-outline-variant">
+      <div class="flex items-center gap-3"><span class="material-symbols-outlined text-[22px] text-primary">translate</span>
+        <div><p class="font-medium">لغة التطبيق</p><p class="text-sm text-outline">العربية • الإنجليزية قريباً</p></div></div>
+    </div>
+    <button class="flex items-center justify-between p-4 rounded-xl bg-surface-container-lowest border border-outline-variant text-right hover:bg-surface-container-low" onclick="openModal('modal-sizes')">
+      <span class="flex items-center gap-3"><span class="material-symbols-outlined text-[22px] text-primary">straighten</span>
+        <span><span class="block font-medium">مقاساتي</span><span class="block text-sm text-outline" id="sizes-summary">طول العباية ٥٦ • البليزر ٣٨</span></span></span>
+      <span class="material-symbols-outlined text-outline text-[20px]">chevron_left</span>
+    </button>
+    <div class="flex items-center justify-between p-4 rounded-xl bg-surface-container-lowest border border-outline-variant">
+      <div class="flex items-center gap-3"><span class="material-symbols-outlined text-[22px] text-primary">lock</span>
+        <div><p class="font-medium" id="faceid-label">قفل الدولاب بـ Face ID</p><p class="text-sm text-outline">يحمي صورك الشخصية</p></div></div>
+      <button role="switch" aria-checked="true" aria-labelledby="faceid-label" id="faceid-toggle" class="w-12 h-7 rounded-full bg-primary p-0.5 flex items-center justify-end transition-colors" onclick="toggleFaceId()"><span class="w-6 h-6 rounded-full bg-white shadow-sm transition-transform" id="faceid-knob"></span></button>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- نافذة: تصوير قطعة -->
+<div class="modal fixed inset-0 z-50 bg-inverse-surface/70 hidden items-center justify-center p-5" id="modal-scanner" role="dialog" aria-modal="true" aria-labelledby="scanner-title">
+  <div class="w-full max-w-sm rounded-2xl bg-surface-container-lowest p-4 shadow-2xl flex flex-col gap-4">
+    <div class="flex items-center justify-between">
+      <h2 class="font-kufi text-base font-semibold flex items-center gap-2" id="scanner-title"><span class="material-symbols-outlined text-primary text-[22px]">photo_camera</span>تصوير قطعة</h2>
+      <button class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-outline" onclick="closeModal('modal-scanner')" aria-label="إغلاق" title="إغلاق"><span class="material-symbols-outlined text-[20px]">close</span></button>
+    </div>
+    <div class="relative aspect-square rounded-xl bg-surface-container overflow-hidden">
+      <img class="w-full h-full object-cover" alt="" src="img-9.jpg"/>
+      <div class="absolute inset-4 border-2 border-dashed border-white/80 rounded-xl pointer-events-none"></div>
+      <div class="absolute bottom-3 inset-x-4 p-3 rounded-lg bg-white text-center shadow-md">
+        <p class="text-sm text-primary font-semibold">تعرّفنا عليها: عباية مناسبات كريب</p>
+        <p class="text-xs text-outline mt-0.5">اللون: خزامي هادئ</p>
+      </div>
+    </div>
+    <button class="h-12 rounded-xl bg-primary text-white font-semibold" onclick="handleSaveScannedItem()">أضيفيها للدولاب</button>
+  </div>
+</div>
+
+<!-- نافذة: تصوير النموذج ثلاثي الأبعاد -->
+<div class="modal fixed inset-0 z-50 bg-inverse-surface/80 hidden items-center justify-center p-5" id="modal-capture" role="dialog" aria-modal="true" aria-labelledby="capture-title">
+  <div class="w-full max-w-sm rounded-2xl bg-surface-container-lowest p-5 shadow-2xl flex flex-col gap-4">
+    <div class="flex items-center justify-between">
+      <h2 class="font-kufi text-base font-semibold flex items-center gap-2" id="capture-title"><span class="material-symbols-outlined text-primary text-[22px]">3d_rotation</span>تصوير نموذجك</h2>
+      <button class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-outline" onclick="closeModal('modal-capture')" aria-label="إغلاق" title="إغلاق"><span class="material-symbols-outlined text-[20px]">close</span></button>
+    </div>
+    <ol class="flex flex-col gap-2 text-sm" id="capture-steps">
+      <li class="flex items-center gap-2"><span class="step-dot w-6 h-6 rounded-full bg-surface-container flex items-center justify-center text-xs">١</span>ثبّتي الجوال على مستوى الصدر وابعدي خطوتين</li>
+      <li class="flex items-center gap-2"><span class="step-dot w-6 h-6 rounded-full bg-surface-container flex items-center justify-center text-xs">٢</span>لفّي حول نفسك ببطء دورة كاملة</li>
+      <li class="flex items-center gap-2"><span class="step-dot w-6 h-6 rounded-full bg-surface-container flex items-center justify-center text-xs">٣</span>نبني نموذجك ثلاثي الأبعاد</li>
+    </ol>
+    <div class="h-2 rounded-full bg-surface-container overflow-hidden"><div class="h-full bg-primary transition-all duration-300" id="capture-bar" style="width:0%"></div></div>
+    <p class="text-sm text-outline text-center" id="capture-status">الصور تبقى على جهازك ومحمية بقفل الدولاب.</p>
+    <button class="h-12 rounded-xl bg-primary text-white font-semibold disabled:opacity-60" id="capture-btn" onclick="runCapture()">ابدئي التصوير</button>
+  </div>
+</div>
+
+<!-- نافذة: ألوانك -->
+<div class="modal fixed inset-0 z-50 bg-inverse-surface/70 hidden items-center justify-center p-5" id="modal-colors" role="dialog" aria-modal="true" aria-labelledby="colors-title">
+  <div class="w-full max-w-sm rounded-2xl bg-surface-container-lowest p-5 shadow-2xl flex flex-col gap-4">
+    <div class="flex items-center justify-between">
+      <h2 class="font-kufi text-base font-semibold" id="colors-title">ألوانك: خريفية دافئة</h2>
+      <button class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-outline" onclick="closeModal('modal-colors')" aria-label="إغلاق" title="إغلاق"><span class="material-symbols-outlined text-[20px]">close</span></button>
+    </div>
+    <div>
+      <p class="text-sm font-semibold mb-2">تناسبك</p>
+      <div class="flex gap-2"><span class="w-10 h-10 rounded-full" style="background:#8980a8"></span><span class="w-10 h-10 rounded-full" style="background:#f3e0bd"></span><span class="w-10 h-10 rounded-full" style="background:#b08d57"></span><span class="w-10 h-10 rounded-full" style="background:#6b4e3d"></span><span class="w-10 h-10 rounded-full" style="background:#2f3a56"></span></div>
+    </div>
+    <div>
+      <p class="text-sm font-semibold mb-2">خففيها قرب الوجه</p>
+      <div class="flex gap-2"><span class="w-10 h-10 rounded-full" style="background:#ff4fa3"></span><span class="w-10 h-10 rounded-full" style="background:#00c2ff"></span><span class="w-10 h-10 rounded-full border border-outline-variant" style="background:#ffffff"></span></div>
+    </div>
+    <p class="text-sm text-on-surface-variant leading-relaxed">نورة تستخدم هذي الدرجات لما ترشح لك إطلالات من دولابك.</p>
+  </div>
+</div>
+
+<!-- نافذة: مقاساتي -->
+<div class="modal fixed inset-0 z-50 bg-inverse-surface/70 hidden items-center justify-center p-5" id="modal-sizes" role="dialog" aria-modal="true" aria-labelledby="sizes-title">
+  <form class="w-full max-w-sm rounded-2xl bg-surface-container-lowest p-5 shadow-2xl flex flex-col gap-4" onsubmit="event.preventDefault(); saveSizes();">
+    <div class="flex items-center justify-between">
+      <h2 class="font-kufi text-base font-semibold" id="sizes-title">مقاساتي</h2>
+      <button type="button" class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-outline" onclick="closeModal('modal-sizes')" aria-label="إغلاق" title="إغلاق"><span class="material-symbols-outlined text-[20px]">close</span></button>
+    </div>
+    <label class="flex flex-col gap-1.5 text-sm font-medium">طول العباية (إنش)
+      <input id="size-abaya" type="number" inputmode="numeric" value="56" class="h-11 px-3 rounded-lg border border-outline-variant bg-white text-base font-normal"/></label>
+    <label class="flex flex-col gap-1.5 text-sm font-medium">مقاس البليزر (أوروبي)
+      <input id="size-blazer" type="number" inputmode="numeric" value="38" class="h-11 px-3 rounded-lg border border-outline-variant bg-white text-base font-normal"/></label>
+    <button type="submit" class="h-12 rounded-xl bg-primary text-white font-semibold">احفظي المقاسات</button>
+  </form>
+</div>
+
+<!-- نافذة: الاشتراك -->
+<div class="modal fixed inset-0 z-50 bg-inverse-surface/70 hidden items-end justify-center" id="modal-subscription" role="dialog" aria-modal="true" aria-labelledby="sub-title">
+  <div class="w-full max-w-[430px] rounded-t-3xl bg-surface-container-lowest px-5 pt-3 pb-10 shadow-2xl flex flex-col gap-4 max-h-[85vh] overflow-y-auto">
+    <div class="w-12 h-1.5 rounded-full bg-outline-variant mx-auto"></div>
+    <div class="flex items-center justify-between">
+      <div><h2 class="font-kufi text-lg font-semibold" id="sub-title">اشتراك بريفيه</h2><p class="text-sm text-outline">تحكّمي في اشتراكك</p></div>
+      <button class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-outline" onclick="closeModal('modal-subscription')" aria-label="إغلاق" title="إغلاق"><span class="material-symbols-outlined text-[20px]">close</span></button>
+    </div>
+    <div class="flex flex-col gap-3" id="sub-options">
+      <div class="p-4 rounded-xl bg-surface-container-low flex items-center justify-between gap-3">
+        <div><p class="font-semibold">تجميد الاشتراك مؤقتاً</p><p class="text-sm text-outline mt-0.5">مسافرة؟ نحفظ لك أيامك حتى ٦٠ يوم</p></div>
+        <button class="flex-shrink-0 px-4 h-10 rounded-full bg-surface-container-highest text-primary text-sm font-semibold" onclick="askConfirm('pause')">جمّدي ٣٠ يوم</button>
+      </div>
+      <div class="p-4 rounded-xl bg-surface-container-low flex items-center justify-between gap-3">
+        <div><p class="font-semibold">الخطة الشهرية</p><p class="text-sm text-outline mt-0.5">٧٩٫٩٩ ر.س شهرياً • تلغين متى ما بغيتِ</p></div>
+        <button class="flex-shrink-0 px-4 h-10 rounded-full bg-primary text-white text-sm font-semibold" onclick="askConfirm('monthly')">حوّلي للشهرية</button>
+      </div>
+      <div class="p-4 rounded-xl bg-secondary-container flex items-center justify-between gap-3">
+        <div><p class="font-semibold">جلسة مجانية مع خبيرة</p><p class="text-sm text-on-secondary-container mt-0.5">٢٠ دقيقة مع خبيرة تنسيق</p></div>
+        <button class="flex-shrink-0 px-4 h-10 rounded-full bg-primary text-white text-sm font-semibold" onclick="handleBookSession()">احجزي</button>
+      </div>
+    </div>
+    <div class="hidden flex-col gap-4 p-4 rounded-xl bg-surface-container-low" id="sub-confirm">
+      <p class="font-kufi font-semibold" id="confirm-title"></p>
+      <p class="text-sm text-on-surface-variant leading-relaxed" id="confirm-body"></p>
+      <div class="flex gap-2">
+        <button class="flex-1 h-12 rounded-xl bg-primary text-white font-semibold" id="confirm-yes" onclick="applyConfirm()"></button>
+        <button class="flex-1 h-12 rounded-xl bg-surface-container-highest text-primary font-semibold" onclick="cancelConfirm()">رجوع</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<nav class="fixed bottom-0 w-full z-40 pb-safe bg-surface border-t border-outline-variant" aria-label="التنقل الرئيسي">
+  <div class="flex justify-around items-center h-16 px-2">
+    <a class="nav-link flex flex-col items-center justify-center min-w-[60px] h-14 gap-0.5" data-tab="home" href="#"><span class="material-symbols-outlined text-[24px]">home</span><span class="text-xs">الرئيسية</span></a>
+    <a class="nav-link flex flex-col items-center justify-center min-w-[60px] h-14 gap-0.5" data-tab="wardrobe" href="#"><span class="material-symbols-outlined text-[24px]">checkroom</span><span class="text-xs">دولابي</span></a>
+    <a class="nav-link flex flex-col items-center justify-end min-w-[72px] h-14 gap-0.5" data-tab="room" href="#"><span class="w-14 h-14 -mt-7 mb-0.5 rounded-full bg-primary text-white flex items-center justify-center shadow-[0_6px_18px_rgba(95,87,124,0.45)] ring-4 ring-surface"><span class="material-symbols-outlined text-[28px]">view_in_ar</span></span><span class="text-xs">غرفة التبديل</span></a>
+    <a class="nav-link flex flex-col items-center justify-center min-w-[60px] h-14 gap-0.5" data-tab="chat" href="#"><span class="material-symbols-outlined text-[24px]">chat_bubble</span><span class="text-xs">نورة</span></a>
+    <a class="nav-link flex flex-col items-center justify-center min-w-[60px] h-14 gap-0.5" data-tab="profile" href="#"><span class="material-symbols-outlined text-[24px]">person</span><span class="text-xs">حسابي</span></a>
+  </div>
+</nav>
+
+<script>
+const AR = n => String(n).replace(/\d/g, d => '٠١٢٣٤٥٦٧٨٩'[d]);
+const $ = id => document.getElementById(id);
+
+/* ---------- تنبيه ---------- */
+let toastTimer;
+function showToast(message) {
+  const t = $('toast');
+  $('toast-text').textContent = message;
+  t.classList.remove('opacity-0', '-translate-y-2');
+  t.classList.add('opacity-100', 'translate-y-0');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => {
+    t.classList.remove('opacity-100', 'translate-y-0');
+    t.classList.add('opacity-0', '-translate-y-2');
+  }, 2600);
+}
+
+/* ---------- التبويبات ---------- */
+function switchTab(tab) {
+  document.querySelectorAll('.view-panel').forEach(p => { p.classList.add('hidden'); p.classList.remove('flex'); });
+  const panel = $('view-' + tab) || $('view-home');
+  panel.classList.remove('hidden'); panel.classList.add('flex');
+  document.querySelectorAll('.nav-link').forEach(a => {
+    const on = a.dataset.tab === tab;
+    a.classList.toggle('text-primary', on);
+    a.classList.toggle('font-semibold', on);
+    a.classList.toggle('text-on-surface-variant', !on);
+    a.querySelector('.material-symbols-outlined').classList.toggle('icon-fill', on);
+    if (on) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
+  });
+  window.scrollTo({ top: 0 });
+}
+document.querySelectorAll('.nav-link').forEach(a => a.addEventListener('click', e => { e.preventDefault(); switchTab(a.dataset.tab); }));
+
+/* ---------- إطلالة اليوم ---------- */
+const looks = [
+  { img: 'img-2.jpg', collection: 'المجموعة الخزامية', badge: 'يناسب ألوانك الدافئة',
+    title: 'عباءة كريب خزامية مع فستان حرير عاجي وشيلة مطرزة',
+    sub: 'مناسبة ليوم التأسيس واللقاءات النهارية الرسمية، بتطريز ذهبي هادئ.' },
+  { img: 'img-4.jpg', collection: 'عمل واجتماعات', badge: 'مريحة لمشوار طويل',
+    title: 'بليزر أوركيد كشميري مع بنطال واسع عاجي وحقيبة اليمامة',
+    sub: 'لاجتماعات العصر والعشاء الخفيف بعد الدوام.' },
+  { img: 'img-6.jpg', collection: 'سهرات', badge: 'تبرز مع إضاءة المساء',
+    title: 'عباية ليل الرياض مع أقراط لؤلؤ وحذاء نيود',
+    sub: 'للعشاء الرسمي في المساء، بدرجات البرقوقي العميقة.' }
+];
+let lookIndex = 0, wornToday = false, streak = 14;
+function renderLook() {
+  const l = looks[lookIndex];
+  const img = $('look-img');
+  img.style.opacity = 0;
+  setTimeout(() => { img.src = l.img; img.style.opacity = 1; }, 150);
+  $('look-title').textContent = l.title;
+  $('look-sub').textContent = l.sub;
+  $('look-collection').textContent = l.collection;
+  $('look-badge-text').textContent = l.badge;
+  $('look-counter').textContent = AR(lookIndex + 1) + ' من ' + AR(looks.length);
+}
+function renderWearButton() {
+  const b = $('btn-wear-today');
+  b.disabled = wornToday;
+  b.classList.toggle('bg-secondary', wornToday);
+  b.innerHTML = wornToday
+    ? '<span class="material-symbols-outlined text-[20px]">done_all</span><span>سجّلناها لليوم</span>'
+    : '<span class="material-symbols-outlined text-[20px]">check_circle</span><span>ارتديتها اليوم</span>';
+}
+function handleWearToday() {
+  if (wornToday) return;
+  wornToday = true; streak++;
+  $('streak-count').textContent = AR(streak) + ' يوم تأنّق';
+  renderWearButton();
+  showToast('سجّلنا إطلالتك في يومياتك 🌸');
+}
+function handleSwapLook() {
+  lookIndex = (lookIndex + 1) % looks.length;
+  renderLook();
+}
+
+/* ---------- الدولاب ---------- */
+const items = [
+  { img: 'img-3.jpg', cat: 'abayas', name: 'عباءة المها', desc: 'كريب خزامي مطرز يدوياً', tag: 'لبستيها ٤ مرات', occ: 'يوم التأسيس', fav: true },
+  { img: 'img-4.jpg', cat: 'blazers', name: 'بليزر أوركيد كشميري', desc: 'قصة مستقيمة', tag: 'جديدة', occ: 'عمل واجتماعات', fav: false },
+  { img: 'img-5.jpg', cat: 'accessories', name: 'حقيبة اليمامة الصغيرة', desc: 'جلد عاجي بقفل ذهبي', tag: 'لبستيها ٨ مرات', occ: 'سهرات واستقبال', fav: true },
+  { img: 'img-6.jpg', cat: 'abayas', name: 'عباية ليل الرياض', desc: 'شيفون برقوقي', tag: 'لبستيها مرة', occ: 'حفلات رسمية', fav: false }
+];
+let currentCat = 'all';
+function renderWardrobe() {
+  const grid = $('wardrobe-grid');
+  grid.innerHTML = '';
+  items.filter(i => currentCat === 'all' || i.cat === currentCat).forEach((it) => {
+    const idx = items.indexOf(it);
+    const card = document.createElement('div');
+    card.className = 'flex flex-col rounded-xl bg-surface-container-lowest overflow-hidden border border-outline-variant';
+    card.innerHTML = `
+      <div class="relative aspect-[3/4] bg-surface-container-high">
+        <img class="w-full h-full object-cover" alt="" src="${it.img}"/>
+        <span class="absolute top-2 right-2 px-2 py-0.5 rounded-full bg-white text-xs text-primary font-medium">${it.tag}</span>
+      </div>
+      <div class="p-3">
+        <h3 class="text-sm font-semibold truncate">${it.name}</h3>
+        <p class="text-xs text-outline mt-0.5">${it.desc}</p>
+        <div class="flex items-center justify-between mt-2">
+          <span class="text-xs text-tertiary">${it.occ}</span>
+          <button class="w-9 h-9 -m-2 flex items-center justify-center ${it.fav ? 'text-primary' : 'text-outline'}" aria-label="${it.fav ? 'إزالة من المفضلة' : 'إضافة للمفضلة'}" aria-pressed="${it.fav}" onclick="toggleFav(${idx})">
+            <span class="material-symbols-outlined text-[20px] ${it.fav ? 'icon-fill' : ''}">favorite</span></button>
+        </div>
+      </div>`;
+    grid.appendChild(card);
+  });
+}
+function toggleFav(i) { items[i].fav = !items[i].fav; renderWardrobe(); }
+function filterWardrobe(cat, btn) {
+  currentCat = cat;
+  document.querySelectorAll('.wardrobe-chip').forEach(b => styleChip(b, b === btn));
+  renderWardrobe();
+}
+function styleChip(b, on) {
+  b.classList.toggle('bg-primary', on); b.classList.toggle('text-white', on); b.classList.toggle('border-primary', on);
+  b.classList.toggle('bg-white', !on); b.classList.toggle('border-outline-variant', !on);
+  b.setAttribute('aria-pressed', on);
+}
+document.querySelectorAll('.wardrobe-chip').forEach((b, i) => styleChip(b, i === 0));
+
+/* ---------- نورة ---------- */
+const replies = [
+  { re: /رأيك|جربت|جرّبت/, text: 'شفت الإطلالة على نموذجك 👌 الطول مضبوط على مقاسك والألوان تمشي مع بشرتك. لو تبين لمسة أخف للنهار، بدّلي الحقيبة بوحدة أصغر.' },
+  { re: /عزيم|عائل|جمع/, text: 'للعزيمة العائلية أقترح عباءة المها مع حقيبة اليمامة الصغيرة وحذاء بكعب منخفض. أنيقة وما تتعبك طول اليوم.' },
+  { re: /شنط|حقيب|كحلي/, text: 'مع العباية الكحلية تمشي حقيبة اليمامة العاجية: تكسر غمق الكحلي وتعطي لمسة ذهبية هادئة.' },
+  { re: /لون|خزام|يناسبني/, text: 'ألوانك خريفية دافئة، والخزامي الهادئ يناسبك خصوصاً مع العاجي أو الذهبي. تجنّبي الدرجات الفاقعة قرب الوجه.' },
+  { re: /عمل|اجتماع|دوام|مكتب/, text: 'للاجتماعات: بليزر أوركيد الكشميري مع بنطال واسع عاجي وإكسسوار بسيط. رسمي ومريح.' },
+  { re: /سهر|عشاء|حفل|زواج|عرس/, text: 'للسهرة: عباية ليل الرياض مع حقيبة اليمامة وأقراط لؤلؤ. البرقوقي يبرز مع إضاءة المساء.' },
+  { re: /سبت|أحد|بكره|بكرة/, text: 'ما عندك مناسبات مسجّلة ذاك اليوم. إذا طلعتي مشوار خفيف: بليزر أوركيد مع بنطال عاجي يكفي ويوفي.' }
+];
+const fallback = [
+  'وصلتني 🌸 قولي لي وش المناسبة ووقتها، وتبين شي مريح ولا رسمي؟',
+  'أقدر أنسق لك من قطع دولابك. وش المناسبة اللي في بالك؟'
+];
+let fallbackIdx = 0;
+function bubble(text, mine) {
+  const wrap = document.createElement('div');
+  wrap.className = 'flex flex-col max-w-[85%] gap-1 ' + (mine ? 'items-end self-end' : 'items-start self-start');
+  const b = document.createElement('div');
+  b.className = 'px-4 py-3 rounded-2xl leading-relaxed ' + (mine ? 'rounded-tl-md bg-primary text-white' : 'rounded-tr-md bg-surface-container');
+  b.textContent = text;
+  const t = document.createElement('span');
+  t.className = 'text-xs text-outline px-1';
+  t.textContent = 'الآن';
+  wrap.append(b, t);
+  const c = $('chat-messages');
+  c.appendChild(wrap);
+  c.scrollTop = c.scrollHeight;
+}
+function reply(text) {
+  const ind = $('typing-indicator');
+  ind.classList.remove('hidden'); ind.classList.add('flex');
+  setTimeout(() => {
+    ind.classList.add('hidden'); ind.classList.remove('flex');
+    const hit = replies.find(r => r.re.test(text));
+    bubble(hit ? hit.text : fallback[fallbackIdx++ % fallback.length], false);
+  }, 1100);
+}
+function sendChatMessage() {
+  const input = $('chat-input');
+  const text = input.value.trim();
+  if (!text) return;
+  bubble(text, true); input.value = ''; reply(text);
+}
+function sendQuickPrompt(text) { bubble(text, true); reply(text); }
+
+/* ---------- التقويم ---------- */
+const days = [
+  { key: 'thu', short: 'خميس', name: 'الخميس', num: '٢٢', events: [
+    { title: 'احتفال يوم التأسيس', time: '١:٠٠ م', place: 'حي الطريف التاريخي', look: 'عباءة المها مع شيلة مطرزة بخيوط ذهبية وحذاء نيود.', dot: 'bg-tertiary', ready: true },
+    { title: 'عشاء عمل', time: '٨:٣٠ م', place: 'كافد، الرياض', look: 'طقم كريب كحلي مع بليزر أوركيد وحقيبة اليمامة.', dot: 'bg-primary', ready: false } ] },
+  { key: 'fri', short: 'جمعة', name: 'الجمعة', num: '٢٣', events: [
+    { title: 'عزيمة عائلية', time: '١:٣٠ م', place: 'بيت الأهل', look: 'عباية خزامية خفيفة مع حقيبة اليمامة وحذاء بكعب منخفض.', dot: 'bg-primary', ready: false } ] },
+  { key: 'sat', short: 'سبت', name: 'السبت', num: '٢٤', events: [] },
+  { key: 'sun', short: 'أحد', name: 'الأحد', num: '٢٥', events: [
+    { title: 'اجتماع الفريق الأسبوعي', time: '٩:٠٠ ص', place: 'المكتب', look: 'بليزر أوركيد كشميري مع بنطال واسع عاجي.', dot: 'bg-primary', ready: false } ] }
+];
+let dayIdx = 0;
+function renderDates() {
+  const strip = $('date-strip');
+  strip.innerHTML = '';
+  days.forEach((d, i) => {
+    const on = i === dayIdx;
+    const b = document.createElement('button');
+    b.className = 'flex flex-col items-center py-3 rounded-xl border transition-colors ' + (on ? 'bg-primary text-white border-primary' : 'bg-white border-outline-variant');
+    b.setAttribute('aria-pressed', on);
+    b.setAttribute('aria-label', d.name + ' ' + d.num + (d.events.length ? '، فيه مناسبات' : ''));
+    b.innerHTML = `<span class="text-xs ${on ? '' : 'text-outline'}">${d.short}</span>
+      <span class="text-xl font-semibold mt-0.5">${d.num}</span>
+      <span class="w-1.5 h-1.5 rounded-full mt-1 ${d.events.length ? (on ? 'bg-tertiary-fixed' : 'bg-primary') : 'bg-transparent'}"></span>`;
+    b.onclick = () => { dayIdx = i; renderDates(); renderEvents(); };
+    strip.appendChild(b);
+  });
+}
+function renderEvents() {
+  const d = days[dayIdx];
+  $('current-day-heading').textContent = 'مناسبات ' + d.name;
+  const list = $('events-list');
+  list.innerHTML = '';
+  if (!d.events.length) {
+    list.innerHTML = `<div class="flex flex-col items-center text-center gap-3 p-6 rounded-xl border border-dashed border-outline-variant">
+      <span class="material-symbols-outlined text-[28px] text-outline">event_available</span>
+      <p class="text-sm text-on-surface-variant">ما عندك مناسبات يوم ${d.name}.</p>
+      <button class="px-4 h-10 rounded-full bg-primary text-white text-sm font-semibold" onclick="switchTab('chat'); sendQuickPrompt('وش ألبس يوم ${d.name}؟')">اسألي نورة عن إطلالة</button></div>`;
+    return;
+  }
+  d.events.forEach((e, i) => {
+    const card = document.createElement('div');
+    card.className = 'p-4 rounded-xl bg-surface-container-lowest border border-outline-variant flex flex-col gap-2';
+    card.innerHTML = `
+      <div class="flex items-center justify-between gap-2">
+        <div class="flex items-center gap-2 min-w-0"><span class="w-2.5 h-2.5 rounded-full flex-shrink-0 ${e.dot}"></span><h3 class="font-semibold truncate">${e.title}</h3></div>
+        <span class="flex-shrink-0 px-2.5 py-0.5 rounded-full bg-surface-container-high text-primary text-xs">${e.time}</span>
+      </div>
+      <p class="text-sm text-on-surface-variant leading-relaxed">${e.look}</p>
+      <div class="flex items-center justify-between pt-1">
+        <span class="text-xs text-outline">${e.place}</span>
+        <button class="px-3 h-9 rounded-full text-sm font-semibold ${e.ready ? 'bg-secondary-container text-on-secondary-container' : 'bg-surface-container text-outline'}" onclick="toggleReady(${i})">${e.ready ? 'جاهزة ✓' : 'جهّزيها'}</button>
+      </div>`;
+    list.appendChild(card);
+  });
+}
+function toggleReady(i) {
+  const e = days[dayIdx].events[i];
+  e.ready = !e.ready;
+  renderEvents();
+  showToast(e.ready ? 'تمام، الإطلالة جاهزة ✨' : 'رجّعناها لقائمة التجهيز');
+}
+
+/* ---------- النوافذ ---------- */
+let openId = null, lastFocus = null;
+function openModal(id) {
+  if (openId) hideModal(openId);
+  lastFocus = document.activeElement;
+  const m = $(id);
+  m.classList.remove('hidden'); m.classList.add('flex');
+  openId = id;
+  history.pushState({ modal: id }, '');
+  const f = m.querySelector('button, input');
+  if (f) f.focus();
+}
+function hideModal(id) {
+  const m = $(id);
+  m.classList.add('hidden'); m.classList.remove('flex');
+  openId = null;
+  if (lastFocus) lastFocus.focus();
+}
+function closeModal(id) {
+  if (openId !== id) return;
+  hideModal(id);
+  if (history.state && history.state.modal === id) history.back();
+}
+window.addEventListener('popstate', () => { if (openId) hideModal(openId); });
+document.querySelectorAll('.modal').forEach(m => m.addEventListener('click', e => { if (e.target === m) closeModal(m.id); }));
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && openId) closeModal(openId); });
+
+function handleSaveScannedItem() {
+  closeModal('modal-scanner');
+  showToast('أضفنا القطعة لدولابك 📸');
+}
+function saveSizes() {
+  const a = $('size-abaya').value || '56', b = $('size-blazer').value || '38';
+  $('sizes-summary').textContent = 'طول العباية ' + AR(a) + ' • البليزر ' + AR(b);
+  closeModal('modal-sizes');
+  showToast('حفظنا مقاساتك');
+}
+function toggleFaceId() {
+  const t = $('faceid-toggle'), on = t.getAttribute('aria-checked') !== 'true';
+  t.setAttribute('aria-checked', on);
+  t.classList.toggle('bg-primary', on); t.classList.toggle('bg-outline-variant', !on);
+  t.classList.toggle('justify-end', on);
+  showToast(on ? 'فعّلنا قفل الدولاب' : 'أوقفنا قفل الدولاب');
+}
+
+/* ---------- الاشتراك مع تأكيد ---------- */
+const confirms = {
+  pause: { title: 'تجميد الاشتراك ٣٠ يوم؟', body: 'ما تنحسب أيام اشتراكك خلال التجميد، وتقدرين ترجعين قبل نهايتها متى ما بغيتِ.', yes: 'جمّدي الاشتراك', done: 'جمّدنا اشتراكك ٣٠ يوم ❄️' },
+  monthly: { title: 'التحويل للخطة الشهرية؟', body: 'يبدأ خصم ٧٩٫٩٩ ر.س شهرياً من تاريخ تجديدك القادم، وتقدرين تلغين في أي وقت.', yes: 'أكّدي التحويل', done: 'حوّلنا اشتراكك للخطة الشهرية' }
+};
+let pending = null;
+function openSubscriptionSheet() { cancelConfirm(); openModal('modal-subscription'); }
+function askConfirm(kind) {
+  pending = kind;
+  const c = confirms[kind];
+  $('confirm-title').textContent = c.title;
+  $('confirm-body').textContent = c.body;
+  $('confirm-yes').textContent = c.yes;
+  $('sub-options').classList.add('hidden'); $('sub-options').classList.remove('flex');
+  $('sub-confirm').classList.remove('hidden'); $('sub-confirm').classList.add('flex');
+  $('confirm-yes').focus();
+}
+function cancelConfirm() {
+  pending = null;
+  $('sub-confirm').classList.add('hidden'); $('sub-confirm').classList.remove('flex');
+  $('sub-options').classList.remove('hidden'); $('sub-options').classList.add('flex');
+}
+function applyConfirm() {
+  const c = confirms[pending];
+  closeModal('modal-subscription');
+  showToast(c.done);
+  if (pending === 'pause') $('membership-note').textContent = 'العضوية مجمّدة ٣٠ يوماً';
+  if (pending === 'monthly') $('membership-note').textContent = 'الخطة الشهرية تبدأ من التجديد القادم';
+  pending = null;
+}
+function handleBookSession() {
+  closeModal('modal-subscription');
+  showToast('وصل طلبك، بنرسل لك المواعيد المتاحة على واتساب');
+}
+
+/* ---------- غرفة التبديل ---------- */
+let worn = new Set([0]);
+const lookToWorn = [[0], [1, 2], [3, 2]];
+function openRoomFromLook() { worn = new Set(lookToWorn[lookIndex]); renderRoom(); switchTab('room'); }
+function toggleWorn(i) {
+  if (worn.has(i)) worn.delete(i);
+  else {
+    if (items[i].cat === 'abayas') items.forEach((it, j) => { if (it.cat === 'abayas') worn.delete(j); });
+    worn.add(i);
+  }
+  renderRoom();
+}
+function renderRoom() {
+  $('avatar-img').src = worn.has(3) ? 'img-2.jpg' : 'img-10.jpg';
+  const chips = $('worn-chips');
+  chips.innerHTML = '';
+  [...worn].forEach(i => {
+    const c = document.createElement('span');
+    c.className = 'px-3 py-1.5 rounded-full bg-white/95 text-xs font-medium shadow-sm';
+    c.textContent = items[i].name;
+    chips.appendChild(c);
+  });
+  if (!worn.size) chips.innerHTML = '<span class="px-3 py-1.5 rounded-full bg-white/95 text-xs text-outline shadow-sm">اختاري قطعة من تحت</span>';
+  const rail = $('room-rail');
+  rail.innerHTML = '';
+  items.forEach((it, i) => {
+    const on = worn.has(i);
+    const b = document.createElement('button');
+    b.className = 'flex-shrink-0 w-24 flex flex-col gap-1 text-right';
+    b.setAttribute('aria-pressed', on);
+    b.innerHTML = `<span class="relative block w-24 h-28 rounded-xl overflow-hidden border-2 ${on ? 'border-primary' : 'border-transparent'}">
+        <img src="${it.img}" alt="" class="w-full h-full object-cover"/>
+        ${on ? '<span class="absolute top-1 left-1 w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center"><span class="material-symbols-outlined text-[16px]">check</span></span>' : ''}
+      </span><span class="text-xs truncate ${on ? 'font-semibold text-primary' : ''}">${it.name}</span>`;
+    b.onclick = () => toggleWorn(i);
+    rail.appendChild(b);
+  });
+  const notes = $('fit-notes');
+  const lines = [];
+  if (worn.has(0) || worn.has(3)) lines.push(['check_circle', 'text-emerald-700', 'طول العباية مضبوط على مقاسك المسجّل (٥٦)']);
+  if (worn.has(1)) lines.push(['check_circle', 'text-emerald-700', 'البليزر مقاس ٣٨ مريح على الأكتاف']);
+  if (worn.has(1) && (worn.has(0) || worn.has(3))) lines.push(['info', 'text-tertiary', 'البليزر فوق العباية يحتاج كم أقصر شوي']);
+  if (worn.has(2)) lines.push(['check_circle', 'text-emerald-700', 'حجم الحقيبة متناسب مع طولك']);
+  notes.innerHTML = '<p class="font-semibold text-sm">كيف تجلس عليك</p>' + (lines.length
+    ? lines.map(([ic, col, t]) => `<p class="flex items-center gap-2 text-sm"><span class="material-symbols-outlined text-[18px] ${col}">${ic}</span>${t}</p>`).join('')
+    : '<p class="text-sm text-outline">اختاري قطعة عشان نوريك المقاس عليك.</p>');
+}
+function rotateAvatar(v) {
+  v = Number(v);
+  $('avatar-img').style.transform = `rotateY(${v}deg) scale(${1 - Math.abs(v) / 400})`;
+  $('avatar-angle').textContent = v < -15 ? 'جانب أيمن' : v > 15 ? 'جانب أيسر' : 'أمامي';
+}
+function saveRoomLook() {
+  if (!worn.size) { showToast('اختاري قطعة أول'); return; }
+  showToast('حفظنا الإطلالة في مفضلتك ✨');
+}
+function askNoraAboutRoom() {
+  if (!worn.size) { showToast('اختاري قطعة أول'); return; }
+  switchTab('chat');
+  sendQuickPrompt('وش رأيك في اللي جربته: ' + [...worn].map(i => items[i].name).join(' + ') + '؟');
+}
+function openCapture() {
+  $('capture-bar').style.width = '0%';
+  $('capture-btn').disabled = false;
+  $('capture-btn').textContent = 'ابدئي التصوير';
+  $('capture-status').textContent = 'الصور تبقى على جهازك ومحمية بقفل الدولاب.';
+  document.querySelectorAll('#capture-steps .step-dot').forEach(d => d.className = 'step-dot w-6 h-6 rounded-full bg-surface-container flex items-center justify-center text-xs');
+  openModal('modal-capture');
+}
+function runCapture() {
+  const btn = $('capture-btn'), dots = document.querySelectorAll('#capture-steps .step-dot');
+  const msgs = ['جاهزين… ثبّتي الجوال', 'لفّي ببطء… ممتاز', 'نبني نموذجك…'];
+  btn.disabled = true; btn.textContent = 'جاري التصوير…';
+  let p = 0;
+  const timer = setInterval(() => {
+    p += 5;
+    $('capture-bar').style.width = p + '%';
+    const step = Math.min(2, Math.floor(p / 34));
+    dots.forEach((d, i) => d.className = 'step-dot w-6 h-6 rounded-full flex items-center justify-center text-xs ' + (i <= step ? 'bg-primary text-white' : 'bg-surface-container'));
+    $('capture-status').textContent = msgs[step];
+    if (p >= 100) {
+      clearInterval(timer);
+      if (openId === 'modal-capture') closeModal('modal-capture');
+      $('avatar-updated').textContent = 'آخر تصوير: الآن';
+      $('avatar-rotate').value = 0; rotateAvatar(0);
+      showToast('نموذجك الجديد جاهز ✨');
+    }
+  }, 150);
+}
+
+/* ---------- البداية ---------- */
+renderLook(); renderWearButton(); renderWardrobe(); renderDates(); renderEvents(); renderRoom();
+switchTab('home');
+</script>
+</body></html>
