@@ -11,7 +11,7 @@ import re, sys, zipfile
 AR = re.compile('[؀-ۿ]')
 LAT = re.compile('[A-Za-z]')
 
-def fix_paragraph(m):
+def fix_paragraph(m, in_table=False):
     p = m.group(0)
     text = ''.join(re.findall(r'<w:t[^>]*>([^<]*)</w:t>', p))
     arabic = bool(AR.search(text)) or text.strip() == '' or not LAT.search(text)
@@ -23,7 +23,11 @@ def fix_paragraph(m):
     if '<w:bidi/>' not in p:
         # bidi must come after pStyle/numPr in pPr order; before jc
         p = re.sub(r'(<w:pPr>(?:<w:pStyle[^>]*/>)?(?:<w:keepNext/>)?(?:<w:numPr>.*?</w:numPr>)?)', r'\1<w:bidi/>', p, count=1)
-    p = re.sub(r'<w:jc w:val="(left|right)"/>', '', p)
+    p = re.sub(r'<w:jc w:val="[a-z]+"/>', '', p)
+    # Justify: in Word/LibreOffice the last line follows RTL (right side); viewers that
+    # ignore RTL still show the text aligned on the right edge. Headings keep the default.
+    if not in_table and 'w:val="Heading' not in p:
+        p = p.replace('<w:bidi/>', '<w:bidi/><w:jc w:val="both"/>', 1)
     # runs with Arabic get rtl
     def run(rm):
         r = rm.group(0)
@@ -47,7 +51,9 @@ def fix_table(m):
 
 def fix_document(x):
     x = re.sub(r'<w:tbl>.*?</w:tbl>', fix_table, x, flags=re.S)
-    x = re.sub(r'<w:p>.*?</w:p>', fix_paragraph, x, flags=re.S)
+    parts = re.split(r'(<w:tbl>.*?</w:tbl>)', x, flags=re.S)
+    x = ''.join(re.sub(r'<w:p>.*?</w:p>', (lambda m, t=part.startswith('<w:tbl>'): fix_paragraph(m, t)), part, flags=re.S)
+                for part in parts)
     def sect(m):
         s = m.group(0)
         s = re.sub(r'<w:pgSz[^>]*/>', '<w:pgSz w:w="11906" w:h="16838"/>', s)
